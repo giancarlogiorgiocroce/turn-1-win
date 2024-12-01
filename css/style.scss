@@ -1,0 +1,77 @@
+@import "variables.scss";
+
+* {
+  box-sizing: border-box;
+  background-color: rgba(0, 255, 0, 0.1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+input {
+  background-color: #fff;
+  border-radius: 3rem;
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+}
+
+body {
+  height: 100vh;
+
+  header.nav {
+    @include flex-center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2rem 0;
+
+    .nav-item {
+      min-width: 10vw;
+
+      input {
+        text-align: center;
+      }
+
+      .kind-of-game-ct {
+        text-align: center;
+        margin-top: 3rem;
+      }
+    }
+    // height: 20vh;
+  }
+
+  main.content {
+    @include flex-center;
+    max-height: 50vh;
+    // padding: 2rem;
+    background-color: $cGrey;
+
+    .sets-ct {
+      max-width: 70%;
+      margin: 1rem;
+      padding: 1rem;
+      overflow-y: scroll;
+      flex: 2.5;
+
+      .row.set {
+        @include flex-center;
+        justify-content: space-around;
+        margin: 2rem 0;
+        gap: 1rem;
+        .item {
+          flex: 1;
+          text-align: center;
+          padding: 0.25rem 0.75rem;
+          min-height: 1.5rem;
+        }
+      }
+    }
+    .cat-ct {
+      margin: 1rem;
+      padding: 1rem;
+      flex: 1;
+    }
+  }
+  // footer.info {
+  //   height: 30vh;
+  // }
+}
