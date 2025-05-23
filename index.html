@@ -1,57 +1,1098 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turn 1 Win</title>
-  <link rel="stylesheet" href="./css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTG Probability Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            /* Default theme (Red) */
+            --primary-color: #c93814;
+            --primary-light: #ff4d2e;
+            --primary-dark: #a02e10;
+            --accent-color: #ff6b47;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #000000;
+        }
+
+        /* Color Themes */
+        .theme-white {
+            --primary-color: #fffbd5;
+            --primary-light: #fff8c5;
+            --primary-dark: #f0e68c;
+            --accent-color: #ffd700;
+            --bg-primary: #2c2416;
+            --bg-secondary: #3d3220;
+            --bg-tertiary: #1a1610;
+        }
+
+        .theme-blue {
+            --primary-color: #0e68ab;
+            --primary-light: #1e88e5;
+            --primary-dark: #0d47a1;
+            --accent-color: #42a5f5;
+            --bg-primary: #0a1929;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #020617;
+        }
+
+        .theme-black {
+            --primary-color: #6a4c93;
+            --primary-light: #8b5a9f;
+            --primary-dark: #4a2c5a;
+            --accent-color: #9d4edd;
+            --bg-primary: #1a0f1f;
+            --bg-secondary: #2d1b36;
+            --bg-tertiary: #0f0811;
+        }
+
+        .theme-red {
+            --primary-color: #c93814;
+            --primary-light: #ff4d2e;
+            --primary-dark: #a02e10;
+            --accent-color: #ff6b47;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #000000;
+        }
+
+        .theme-green {
+            --primary-color: #00695c;
+            --primary-light: #26a69a;
+            --primary-dark: #004d40;
+            --accent-color: #4db6ac;
+            --bg-primary: #0f1b0f;
+            --bg-secondary: #1b2d1b;
+            --bg-tertiary: #0a0f0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-primary) 75%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(var(--primary-color-rgb), 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: #cccccc;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .color-selector {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .mana-symbol {
+            width: clamp(35px, 8vw, 50px);
+            height: clamp(35px, 8vw, 50px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mana-symbol::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .mana-symbol:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mana-symbol:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .mana-symbol.active {
+            transform: scale(1.15);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .mana-white { background: #fffbd5; color: #000; }
+        .mana-blue { background: #0e68ab; color: #fff; }
+        .mana-black { background: #6a4c93; color: #fff; }
+        .mana-red { background: #c93814; color: #fff; }
+        .mana-green { background: #00695c; color: #fff; }
+
+        .section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: clamp(1rem, 4vw, 2rem);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+
+        .section.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .section.completed {
+            border-color: rgba(var(--primary-color-rgb), 0.4);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .section-number {
+            width: clamp(35px, 8vw, 45px);
+            height: clamp(35px, 8vw, 45px);
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .commander-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .commander-btn {
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .commander-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.1);
+            transform: translateY(-2px);
+        }
+
+        .commander-btn.selected {
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.2);
+        }
+
+        .hand-container {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+
+        .hand {
+            display: flex;
+            gap: -10px;
+            position: relative;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: clamp(100px, 15vw, 120px);
+            height: clamp(150px, 22vw, 180px);
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            margin: 0.25rem;
+        }
+
+        .card:nth-child(1) { transform: rotate(-20deg) translateY(20px); z-index: 1; }
+        .card:nth-child(2) { transform: rotate(-12deg) translateY(10px); z-index: 2; }
+        .card:nth-child(3) { transform: rotate(-6deg) translateY(5px); z-index: 3; }
+        .card:nth-child(4) { transform: rotate(0deg); z-index: 4; }
+        .card:nth-child(5) { transform: rotate(6deg) translateY(5px); z-index: 3; }
+        .card:nth-child(6) { transform: rotate(12deg) translateY(10px); z-index: 2; }
+        .card:nth-child(7) { transform: rotate(20deg) translateY(20px); z-index: 1; }
+
+        .card:hover {
+            transform: rotate(0deg) translateY(-15px) scale(1.05);
+            z-index: 10 !important;
+        }
+
+        .card-content {
+            padding: 0.75rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 0.5rem;
+            color: #ffffff;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .card-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .card-number {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+
+        .card-number:hover {
+            transform: scale(1.02);
+        }
+
+        .calculate-section {
+            text-align: center;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border: none;
+            padding: clamp(1rem, 3vw, 1.5rem) clamp(2rem, 6vw, 3rem);
+            border-radius: 12px;
+            color: white;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1rem;
+        }
+
+        .calculate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(var(--primary-color-rgb), 0.3);
+        }
+
+        .calculate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .probability-display {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .results-details {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .results-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
+        }
+
+        .results-details p, .results-details li {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .download-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #333333, #1a1a1a);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-1px);
+            border-color: var(--primary-color);
+        }
+
+        .qr-container {
+            margin: 1rem auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .hand {
+                gap: 5px;
+            }
+            
+            .card {
+                width: clamp(80px, 20vw, 100px);
+                height: clamp(120px, 30vw, 150px);
+                margin: 2px;
+                transform: none !important;
+            }
+            
+            .card:hover {
+                transform: scale(1.05) translateY(-5px) !important;
+            }
+
+            .commander-selection {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .section {
+                margin-bottom: 1rem;
+            }
+
+            .results-details {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .commander-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .hand {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .card {
+                width: calc(50% - 4px);
+                height: 120px;
+            }
+
+            .download-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .download-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
 </head>
-<body>
-  <header class="nav">
-    <div class="nav-item deck-tot-numb-ct">
-      <input type="number" value="99">
-    </div>
-    <div class="nav-item middle-sec">
-      <h1>Turn 1 Win</h1>
-      <div class="kind-of-game-ct">
-        <span class="game-btn">Magic</span>
-        <!-- <span class="game-btn">Poker</span> -->
-        <!-- <span class="game-btn">Custom</span> -->
-      </div>
+<body class="theme-red">
+    <div class="container">
+        <header class="header">
+            <h1>MTG Probability Calculator</h1>
+            <p>Calcola la probabilità di pescare la tua mano perfetta</p>
+            <div class="color-selector">
+                <div class="mana-symbol mana-white" data-theme="white" title="Plains">W</div>
+                <div class="mana-symbol mana-blue" data-theme="blue" title="Island">U</div>
+                <div class="mana-symbol mana-black" data-theme="black" title="Swamp">B</div>
+                <div class="mana-symbol mana-red active" data-theme="red" title="Mountain">R</div>
+                <div class="mana-symbol mana-green" data-theme="green" title="Forest">G</div>
+            </div>
+        </header>
+
+        <!-- Sezione 1: Commander -->
+        <section class="section active" id="commander-section">
+            <h2 class="section-title">
+                <span class="section-number">1</span>
+                Quante carte commander hai?
+            </h2>
+            <div class="commander-selection">
+                <button class="commander-btn" data-commanders="1">1 Commander</button>
+                <button class="commander-btn" data-commanders="2">2 Commander</button>
+                <button class="commander-btn" data-commanders="3">3 Commander</button>
+                <button class="commander-btn" data-commanders="4">4 Commander</button>
+            </div>
+        </section>
+
+        <!-- Sezione 2: Carte -->
+        <section class="section" id="cards-section">
+            <h2 class="section-title">
+                <span class="section-number">2</span>
+                Inserisci le carte desiderate
+            </h2>
+            <div class="hand-container">
+                <div class="hand" id="hand">
+                    <!-- Le carte saranno generate dinamicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sezione 3: Calcolo -->
+        <section class="section" id="calculate-section">
+            <h2 class="section-title">
+                <span class="section-number">3</span>
+                Calcola la probabilità
+            </h2>
+            <div class="calculate-section">
+                <button class="calculate-btn" id="calculate-btn" disabled>
+                    Calcola Probabilità
+                </button>
+            </div>
+        </section>
+
+        <!-- Sezione 4: Risultati -->
+        <section class="section" id="results-section">
+            <h2 class="section-title">
+                <span class="section-number">4</span>
+                Risultati
+            </h2>
+            <div class="results" id="results">
+                <!-- I risultati saranno mostrati qui -->
+            </div>
+        </section>
     </div>
 
-    <div class="nav-item hand-tot-numb-ct">
-      <input type="number" value="7">
-    </div>
-  </header>
-  <main class="content">
-    <div class="sets-ct">
-      <div class="row set">
-        <div class="item">Viva la cabala</div>
-        <div class="item">Terra vai</div>
-        <div class="item">Terra vai</div>
-        <div class="item">Cucciolo cucciolo</div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-      </div>
-      <div class="row set">
-        <div class="item">Terra</div>
-        <div class="item">Terra vai</div>
-        <div class="item">Terra vai</div>
-        <div class="item">Cucciolo cucciolo</div>
-        <div class="item">Terra</div>
-        <div class="item">Terra</div>
-        <div class="item">Terra</div>
-      </div>
-      <div class="row set"></div>
-    </div>
-    <div class="cat-ct">
-      <input type="text">
-      <input type="text">
-      <input type="text">
-    </div>  
-  </main>
-  <footer class="info">sono alla fine</footer>
+    <script>
+        class MTGProbabilityCalculator {
+            constructor() {
+                this.commanderCount = 0;
+                this.deckSize = 100;
+                this.handSize = 7;
+                this.cards = [];
+                this.currentTheme = 'red';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.generateCards();
+                this.animateHeader();
+                this.updateColorVariables();
+            }
+
+            animateHeader() {
+                gsap.to('.header', {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power2.out'
+                });
+            }
+
+            setupEventListeners() {
+                // Color theme selector
+                document.querySelectorAll('.mana-symbol').forEach(symbol => {
+                    symbol.addEventListener('click', (e) => {
+                        this.changeTheme(e.target.dataset.theme);
+                    });
+                });
+
+                // Commander selection
+                document.querySelectorAll('.commander-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.selectCommander(e.target);
+                    });
+                });
+
+                // Calculate button
+                document.getElementById('calculate-btn').addEventListener('click', () => {
+                    this.calculateProbability();
+                });
+            }
+
+            changeTheme(theme) {
+                // Remove active class from all symbols
+                document.querySelectorAll('.mana-symbol').forEach(symbol => {
+                    symbol.classList.remove('active');
+                });
+
+                // Add active class to selected symbol
+                document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+
+                // Change body theme class
+                document.body.className = `theme-${theme}`;
+                this.currentTheme = theme;
+
+                // Update CSS variables
+                this.updateColorVariables();
+
+                // Animate theme change
+                gsap.to('body', {
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            }
+
+            updateColorVariables() {
+                const themes = {
+                    white: { rgb: '255, 251, 213' },
+                    blue: { rgb: '14, 104, 171' },
+                    black: { rgb: '106, 76, 147' },
+                    red: { rgb: '201, 56, 20' },
+                    green: { rgb: '0, 105, 92' }
+                };
+
+                if (themes[this.currentTheme]) {
+                    document.documentElement.style.setProperty('--primary-color-rgb', themes[this.currentTheme].rgb);
+                }
+            }
+
+            selectCommander(selectedBtn) {
+                // Remove previous selection
+                document.querySelectorAll('.commander-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+
+                // Add selection to clicked button
+                selectedBtn.classList.add('selected');
+                this.commanderCount = parseInt(selectedBtn.dataset.commanders);
+
+                // Animate commander section completion
+                gsap.to('#commander-section', {
+                    scale: 0.98,
+                    duration: 0.3,
+                    yoyo: true,
+                    repeat: 1,
+                    onComplete: () => {
+                        document.getElementById('commander-section').classList.add('completed');
+                        this.activateSection('cards-section');
+                    }
+                });
+            }
+
+            activateSection(sectionId) {
+                const section = document.getElementById(sectionId);
+                section.classList.add('active');
+                
+                gsap.fromTo(section, 
+                    { opacity: 0.3, scale: 0.95 },
+                    { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out' }
+                );
+
+                // Scroll to section on mobile
+                if (window.innerWidth <= 768) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            generateCards() {
+                const hand = document.getElementById('hand');
+                hand.innerHTML = '';
+
+                for (let i = 0; i < 7; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-content">
+                            <input type="text" class="card-input" placeholder="Nome carta" data-card="${i}" data-type="name">
+                            <input type="number" class="card-number" placeholder="Copie" min="1" max="4" value="1" data-card="${i}" data-type="copies">
+                        </div>
+                    `;
+                    hand.appendChild(card);
+
+                    // Add event listeners
+                    const inputs = card.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        input.addEventListener('input', () => this.updateCard(input));
+                        input.addEventListener('focus', () => this.highlightCard(card));
+                        input.addEventListener('blur', () => this.unhighlightCard(card));
+                    });
+                }
+
+                // Animate cards entrance
+                gsap.fromTo('.card', 
+                    { opacity: 0, y: 50, rotationY: 180 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        rotationY: 0, 
+                        duration: 0.8, 
+                        stagger: 0.1,
+                        ease: 'back.out(1.7)'
+                    }
+                );
+            }
+
+            highlightCard(card) {
+                gsap.to(card, {
+                    boxShadow: '0 0 30px rgba(var(--primary-color-rgb), 0.5)',
+                    borderColor: 'var(--primary-color)',
+                    duration: 0.3
+                });
+            }
+
+            unhighlightCard(card) {
+                gsap.to(card, {
+                    boxShadow: 'none',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    duration: 0.3
+                });
+            }
+
+            updateCard(input) {
+                const cardIndex = parseInt(input.dataset.card);
+                const type = input.dataset.type;
+                
+                if (!this.cards[cardIndex]) {
+                    this.cards[cardIndex] = { name: '', copies: 1 };
+                }
+
+                if (type === 'name') {
+                    this.cards[cardIndex].name = input.value;
+                } else if (type === 'copies') {
+                    this.cards[cardIndex].copies = parseInt(input.value) || 1;
+                }
+
+                this.checkCalculateReady();
+            }
+
+            checkCalculateReady() {
+                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
+                const calculateBtn = document.getElementById('calculate-btn');
+
+                if (filledCards.length > 0 && this.commanderCount !== null) {
+                    calculateBtn.disabled = false;
+                    document.getElementById('cards-section').classList.add('completed');
+                    this.activateSection('calculate-section');
+                    
+                    calculateBtn.classList.add('pulse');
+                } else {
+                    calculateBtn.disabled = true;
+                    calculateBtn.classList.remove('pulse');
+                }
+            }
+
+            calculateProbability() {
+                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
+                
+                if (filledCards.length === 0) return;
+
+                // Stop button animation
+                document.getElementById('calculate-btn').classList.remove('pulse');
+
+                // Calculate hypergeometric probability
+                const deckSizeAfterCommanders = this.deckSize - this.commanderCount;
+                const totalCopiesWanted = filledCards.reduce((sum, card) => sum + card.copies, 0);
+                
+                // Simplified calculation for demonstration
+                const basicProbability = this.calculateHypergeometric(
+                    deckSizeAfterCommanders,
+                    totalCopiesWanted,
+                    this.handSize
+                );
+
+                const probability = Math.min(basicProbability * 100, 100);
+
+                this.displayResults(probability, filledCards, deckSizeAfterCommanders);
+            }
+
+            calculateHypergeometric(deckSize, successCards, draws) {
+                // Simplified probability calculation
+                if (successCards >= draws) {
+                    return 1.0;
+                }
+                
+                let prob = 1.0;
+                for (let i = 0; i < successCards; i++) {
+                    prob *= (successCards - i) / (deckSize - i);
+                }
+                
+                return Math.min(prob, 1.0);
+            }
+
+            displayResults(probability, cards, deckSize) {
+                document.getElementById('calculate-section').classList.add('completed');
+                this.activateSection('results-section');
+
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = `
+                    <div class="probability-display">${probability.toFixed(2)}%</div>
+                    <div class="results-details">
+                        <h3>Dettagli del calcolo</h3>
+                        <p><strong>Carte nel mazzo:</strong> ${deckSize}</p>
+                        <p><strong>Carte nella mano iniziale:</strong> ${this.handSize}</p>
+                        <p><strong>Commander:</strong> ${this.commanderCount}</p>
+                        <p><strong>Tema colore:</strong> ${this.getThemeName()}</p>
+                        <p><strong>Carte desiderate:</strong></p>
+                        <ul>
+                            ${cards.map(card => `<li>${card.name} (${card.copies} copie)</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="qr-container" id="qr-code"></div>
+                    <div class="download-section">
+                        <button class="download-btn" onclick="calculator.generatePDF()">📄 Scarica PDF</button>
+                        <button class="download-btn" onclick="calculator.shareResults()">🔗 Condividi</button>
+                        <button class="download-btn" onclick="calculator.reset()">🔄 Nuovo Calcolo</button>
+                    </div>
+                `;
+
+                // Generate QR Code
+                this.generateQRCode();
+
+                // Animate results
+                gsap.fromTo('.probability-display', 
+                    { scale: 0, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.7)' }
+                );
+
+                gsap.fromTo('.results-details', 
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, delay: 0.3 }
+                );
+
+                gsap.fromTo('.download-section', 
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.6, delay: 0.6 }
+                );
+            }
+
+            getThemeName() {
+                const themeNames = {
+                    white: 'Pianure (Bianco)',
+                    blue: 'Isole (Blu)',
+                    black: 'Paludi (Nero)',
+                    red: 'Montagne (Rosso)',
+                    green: 'Foreste (Verde)'
+                };
+                return themeNames[this.currentTheme] || 'Sconosciuto';
+            }
+
+            generateQRCode() {
+                const data = {
+                    commanders: this.commanderCount,
+                    cards: this.cards.filter(card => card && card.name.trim() !== ''),
+                    theme: this.currentTheme,
+                    timestamp: new Date().toISOString(),
+                    url: window.location.href
+                };
+
+                const qrContainer = document.getElementById('qr-code');
+                qrContainer.innerHTML = '';
+
+                QRCode.toCanvas(qrContainer, JSON.stringify(data), {
+                    width: Math.min(150, window.innerWidth * 0.3),
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, (error) => {
+                    if (error) {
+                        qrContainer.innerHTML = '<p>Errore nella generazione del QR Code</p>';
+                    }
+                });
+            }
+
+            generatePDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Header
+                doc.setFontSize(20);
+                doc.setTextColor(201, 56, 20);
+                doc.text('MTG Probability Calculator', 20, 30);
+
+                // Basic info
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Data: ${new Date().toLocaleDateString('it-IT')}`, 20, 50);
+                doc.text(`Tema colore: ${this.getThemeName()}`, 20, 60);
+                doc.text(`Carte commander: ${this.commanderCount}`, 20, 70);
+                doc.text(`Dimensione mazzo: ${100 - this.commanderCount}`, 20, 80);
+
+                // Cards
+                doc.text('Carte desiderate:', 20, 100);
+                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
+                filledCards.forEach((card, index) => {
+                    doc.text(`• ${card.name} (${card.copies} copie)`, 30, 110 + (index * 10));
+                });
+
+                // Probability
+                const probability = document.querySelector('.probability-display').textContent;
+                doc.setFontSize(16);
+                doc.setTextColor(201, 56, 20);
+                doc.text(`Probabilità: ${probability}`, 20, 140 + (filledCards.length * 10));
+
+                // Footer
+                doc.setFontSize(10);
+                doc.setTextColor(128, 128, 128);
+                doc.text('Generato da MTG Probability Calculator', 20, 280);
+
+                doc.save(`mtg-probability-${this.currentTheme}-${new Date().toISOString().split('T')[0]}.pdf`);
+            }
+
+            shareResults() {
+                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
+                const probability = document.querySelector('.probability-display').textContent;
+                
+                const shareText = `🎲 MTG Probability Calculator 🎲\n\n` +
+                                  `🎨 Tema: ${this.getThemeName()}\n` +
+                                  `👑 Commander: ${this.commanderCount}\n` +
+                                  `🃏 Carte desiderate:\n${filledCards.map(card => `• ${card.name} (${card.copies}x)`).join('\n')}\n\n` +
+                                  `📊 Probabilità: ${probability}\n\n` +
+                                  `#MTG #MagicTheGathering #Probability`;
+
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'MTG Probability Calculator',
+                        text: shareText,
+                        url: window.location.href
+                    }).catch(console.error);
+                } else {
+                    // Fallback for browsers without Web Share API
+                    navigator.clipboard.writeText(shareText).then(() => {
+                        alert('Risultati copiati negli appunti!');
+                    }).catch(() => {
+                        // Fallback for clipboard
+                        const textArea = document.createElement('textarea');
+                        textArea.value = shareText;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        alert('Risultati copiati negli appunti!');
+                    });
+                }
+            }
+
+            reset() {
+                this.commanderCount = 0;
+                this.cards = [];
+
+                // Reset all sections
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active', 'completed');
+                });
+
+                document.getElementById('commander-section').classList.add('active');
+
+                // Reset commander buttons
+                document.querySelectorAll('.commander-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+
+                // Reset calculate button
+                const calculateBtn = document.getElementById('calculate-btn');
+                calculateBtn.disabled = true;
+                calculateBtn.classList.remove('pulse');
+
+                // Regenerate cards
+                this.generateCards();
+
+                // Smooth scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Animate reset
+                gsap.fromTo('.container', 
+                    { opacity: 0.7 },
+                    { opacity: 1, duration: 0.5 }
+                );
+            }
+
+            // Utility method for responsive design
+            isMobile() {
+                return window.innerWidth <= 768;
+            }
+
+            // Handle window resize
+            handleResize() {
+                // Regenerate QR code with appropriate size
+                if (document.getElementById('qr-code').children.length > 0) {
+                    this.generateQRCode();
+                }
+
+                // Adjust card layout on mobile
+                if (this.isMobile()) {
+                    document.querySelectorAll('.card').forEach(card => {
+                        card.style.transform = 'none';
+                    });
+                }
+            }
+        }
+
+        // Initialize the calculator
+        const calculator = new MTGProbabilityCalculator();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            calculator.handleResize();
+        });
+
+        // Add touch support for mobile
+        if ('ontouchstart' in window) {
+            document.body.style.cursor = 'pointer';
+        }
+
+        // Keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.classList.contains('card-input')) {
+                const nextInput = e.target.parentElement.querySelector('.card-number');
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        });
+
+        // Add service worker for PWA functionality (optional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Register service worker if available
+                console.log('PWA support available');
+            });
+        }
+    </script>
 </body>
 </html>
