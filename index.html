@@ -203,6 +203,8 @@
             transition: all 0.3s ease;
             opacity: 0.4;
             transform: scale(0.98);
+            position: relative;
+            overflow: hidden;
         }
 
         .section.active {
@@ -223,6 +225,15 @@
             align-items: center;
             gap: 0.5rem;
             flex-wrap: wrap;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .section-number {
@@ -270,6 +281,172 @@
             background: rgba(var(--primary-color-rgb), 0.2);
         }
 
+        /* Cards Slider Styles */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slide-counter {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .add-slide-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(var(--primary-color-rgb), 0.3);
+        }
+
+        .add-slide-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(var(--primary-color-rgb), 0.4);
+        }
+
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .slide {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .slide-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slide-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .slide-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .slide-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.2);
+            transform: scale(1.05);
+        }
+
+        .slide-btn.delete {
+            color: #ff6b6b;
+        }
+
+        .slide-btn.delete:hover {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background: rgba(var(--primary-color-rgb), 0.2);
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .dots-indicator {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
         .hand-container {
             perspective: 1000px;
             display: flex;
@@ -312,6 +489,8 @@
         .card:hover {
             transform: rotate(0deg) translateY(-15px) scale(1.05);
             z-index: 10 !important;
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(var(--primary-color-rgb), 0.3);
         }
 
         .card-content {
@@ -331,11 +510,17 @@
             font-size: clamp(0.8rem, 2vw, 0.9rem);
             margin-bottom: 0.5rem;
             width: 100%;
+            transition: all 0.2s ease;
         }
 
         .card-input:focus {
             outline: none;
             border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .card-number {
@@ -351,6 +536,12 @@
         }
 
         .card-number:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.3);
+        }
+
+        .card-number:focus {
+            outline: none;
             transform: scale(1.02);
         }
 
@@ -453,6 +644,17 @@
                 padding: 0.5rem;
             }
             
+            .section {
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
             .hand {
                 gap: 5px;
             }
@@ -473,12 +675,19 @@
                 gap: 0.75rem;
             }
 
-            .section {
-                margin-bottom: 1rem;
-            }
-
             .results-details {
                 padding: 1rem;
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
 
@@ -506,6 +715,11 @@
             .download-btn {
                 width: 100%;
                 max-width: 300px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: flex-end;
             }
         }
 
@@ -535,6 +749,36 @@
             }
             50% {
                 transform: scale(1.05);
+            }
+        }
+
+        .slide-enter {
+            animation: slideEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideEnter {
+            from {
+                opacity: 0;
+                transform: translateX(100px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .card-appear {
+            animation: cardAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) rotateY(180deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateY(0deg);
             }
         }
     </style>
@@ -567,16 +811,35 @@
             </div>
         </section>
 
-        <!-- Sezione 2: Carte -->
+        <!-- Sezione 2: Carte con Slider -->
         <section class="section" id="cards-section">
-            <h2 class="section-title">
-                <span class="section-number">2</span>
-                Inserisci le carte desiderate
-            </h2>
-            <div class="hand-container">
-                <div class="hand" id="hand">
-                    <!-- Le carte saranno generate dinamicamente -->
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    Inserisci le combinazioni di carte
+                </h2>
+                <div class="controls">
+                    <div class="slide-counter">
+                        <span id="current-slide">1</span> / <span id="total-slides">1</span>
+                    </div>
+                    <button class="add-slide-btn" id="add-slide-btn" title="Aggiungi nuova combinazione">
+                        +
+                    </button>
                 </div>
+            </div>
+
+            <div class="slider-container">
+                <div class="slides-wrapper" id="slides-wrapper">
+                    <!-- Le slide saranno generate dinamicamente -->
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn" id="prev-btn" title="Precedente">‹</button>
+                <div class="dots-indicator" id="dots-indicator">
+                    <!-- I dots saranno generati dinamicamente -->
+                </div>
+                <button class="nav-btn" id="next-btn" title="Successivo">›</button>
             </div>
         </section>
 
@@ -606,21 +869,543 @@
     </div>
 
     <script>
+        class CardsSlider {
+            constructor() {
+                this.slides = [];
+                this.currentSlide = 0;
+                this.slideIdCounter = 0;
+                this.init();
+            }
+
+            init() {
+                this.createFirstSlide();
+                this.setupEventListeners();
+                this.updateNavigation();
+            }
+
+            setupEventListeners() {
+                // Add slide button
+                document.getElementById('add-slide-btn').addEventListener('click', () => {
+                    this.addSlide();
+                });
+
+                // Navigation buttons
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    this.previousSlide();
+                });
+
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    this.nextSlide();
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        this.previousSlide();
+                    } else if (e.key === 'ArrowRight') {
+                        this.nextSlide();
+                    }
+                });
+
+                // Touch/swipe support
+                this.setupTouchNavigation();
+            }
+
+            setupTouchNavigation() {
+                let startX = 0;
+                let startY = 0;
+                let isDragging = false;
+
+                const slider = document.getElementById('slides-wrapper');
+
+                slider.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    isDragging = true;
+                }, { passive: true });
+
+                slider.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const deltaX = e.touches[0].clientX - startX;
+                    const deltaY = e.touches[0].clientY - startY;
+                    
+                    // Only handle horizontal swipes
+                    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+
+                slider.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    isDragging = false;
+
+                    const endX = e.changedTouches[0].clientX;
+                    const deltaX = endX - startX;
+
+                    if (Math.abs(deltaX) > 50) {
+                        if (deltaX > 0) {
+                            this.previousSlide();
+                        } else {
+                            this.nextSlide();
+                        }
+                    }
+                }, { passive: true });
+            }
+
+            createFirstSlide() {
+                this.addSlide(true);
+            }
+
+            addSlide(isFirst = false) {
+                const slideId = this.slideIdCounter++;
+                const slideData = {
+                    id: slideId,
+                    cards: Array(7).fill(null).map(() => ({ name: '', copies: 1 }))
+                };
+
+                this.slides.push(slideData);
+
+                const slideElement = this.createSlideElement(slideData, this.slides.length, isFirst);
+                document.getElementById('slides-wrapper').appendChild(slideElement);
+
+                if (!isFirst) {
+                    // Animate new slide entrance
+                    gsap.fromTo(slideElement, 
+                        { opacity: 0, x: 100 },
+                        { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }
+                    );
+
+                    // Go to new slide
+                    this.goToSlide(this.slides.length - 1);
+                }
+
+                this.updateNavigation();
+                this.updateSlideCounter();
+
+                // Add pulse animation to add button if this is the first slide
+                if (isFirst) {
+                    setTimeout(() => {
+                        document.getElementById('add-slide-btn').classList.add('pulse');
+                        setTimeout(() => {
+                            document.getElementById('add-slide-btn').classList.remove('pulse');
+                        }, 3000);
+                    }, 2000);
+                }
+            }
+
+            createSlideElement(slideData, slideNumber, isFirst = false) {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                slide.dataset.slideId = slideData.id;
+
+                slide.innerHTML = `
+                    <div class="slide-header">
+                        <div class="slide-title">
+                            🎯 Combinazione ${slideNumber}
+                        </div>
+                        <div class="slide-actions">
+                            ${!isFirst ? '<button class="slide-btn delete" title="Elimina combinazione">🗑</button>' : ''}
+                            <button class="slide-btn duplicate" title="Duplica combinazione">📋</button>
+                        </div>
+                    </div>
+                    <div class="hand-container">
+                        <div class="hand">
+                            ${this.generateCardsHTML(slideData.id)}
+                        </div>
+                    </div>
+                `;
+
+                // Add event listeners for slide actions
+                const deleteBtn = slide.querySelector('.delete');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => {
+                        this.deleteSlide(slideData.id);
+                    });
+                }
+
+                const duplicateBtn = slide.querySelector('.duplicate');
+                duplicateBtn.addEventListener('click', () => {
+                    this.duplicateSlide(slideData.id);
+                });
+
+                // Add event listeners for card inputs
+                const inputs = slide.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        this.updateCardData(slideData.id, e.target);
+                    });
+
+                    input.addEventListener('focus', (e) => {
+                        this.highlightCard(e.target.closest('.card'));
+                    });
+
+                    input.addEventListener('blur', (e) => {
+                        this.unhighlightCard(e.target.closest('.card'));
+                    });
+
+                    // Enter key navigation
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            const isNameInput = input.classList.contains('card-input');
+                            if (isNameInput) {
+                                const numberInput = input.parentElement.querySelector('.card-number');
+                                if (numberInput) numberInput.focus();
+                            } else {
+                                // Move to next card's name input
+                                const currentCard = input.closest('.card');
+                                const nextCard = currentCard.nextElementSibling;
+                                if (nextCard) {
+                                    const nextInput = nextCard.querySelector('.card-input');
+                                    if (nextInput) nextInput.focus();
+                                }
+                            }
+                        }
+                    });
+                });
+
+                // Animate cards if not first slide
+                if (!isFirst) {
+                    setTimeout(() => {
+                        const cards = slide.querySelectorAll('.card');
+                        gsap.fromTo(cards, 
+                            { opacity: 0, y: 50, rotationY: 180 },
+                            { 
+                                opacity: 1, 
+                                y: 0, 
+                                rotationY: 0, 
+                                duration: 0.8, 
+                                stagger: 0.1,
+                                ease: 'back.out(1.7)'
+                            }
+                        );
+                    }, 200);
+                }
+
+                return slide;
+            }
+
+            generateCardsHTML(slideId) {
+                return Array(7).fill(0).map((_, i) => `
+                    <div class="card ${i === 0 ? 'card-appear' : ''}">
+                        <div class="card-content">
+                            <input type="text" class="card-input" placeholder="Nome carta" 
+                                   data-slide="${slideId}" data-card="${i}" data-type="name">
+                            <input type="number" class="card-number" placeholder="Copie" 
+                                   min="1" max="4" value="1" 
+                                   data-slide="${slideId}" data-card="${i}" data-type="copies">
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateCardData(slideId, input) {
+                const slideIndex = this.slides.findIndex(slide => slide.id === slideId);
+                if (slideIndex === -1) return;
+
+                const cardIndex = parseInt(input.dataset.card);
+                const type = input.dataset.type;
+
+                if (type === 'name') {
+                    this.slides[slideIndex].cards[cardIndex].name = input.value;
+                } else if (type === 'copies') {
+                    this.slides[slideIndex].cards[cardIndex].copies = parseInt(input.value) || 1;
+                }
+
+                // Trigger validation
+                calculator.checkCalculateReady();
+
+                // Trigger custom event for external listeners
+                const event = new CustomEvent('cardDataUpdated', {
+                    detail: {
+                        slideId,
+                        slideIndex,
+                        cardIndex,
+                        cardData: this.slides[slideIndex].cards[cardIndex],
+                        allSlides: this.slides
+                    }
+                });
+                document.dispatchEvent(event);
+            }
+
+            highlightCard(card) {
+                gsap.to(card, {
+                    boxShadow: '0 0 30px rgba(var(--primary-color-rgb), 0.5)',
+                    borderColor: 'var(--primary-color)',
+                    duration: 0.3
+                });
+            }
+
+            unhighlightCard(card) {
+                gsap.to(card, {
+                    boxShadow: 'none',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    duration: 0.3
+                });
+            }
+
+            deleteSlide(slideId) {
+                if (this.slides.length <= 1) {
+                    alert('Non puoi eliminare l\'ultima combinazione!');
+                    return;
+                }
+
+                const slideIndex = this.slides.findIndex(slide => slide.id === slideId);
+                if (slideIndex === -1) return;
+
+                // Remove from array
+                this.slides.splice(slideIndex, 1);
+
+                // Remove DOM element with animation
+                const slideElement = document.querySelector(`[data-slide-id="${slideId}"]`);
+                gsap.to(slideElement, {
+                    opacity: 0,
+                    x: -100,
+                    duration: 0.4,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        slideElement.remove();
+                        
+                        // Adjust current slide if necessary
+                        if (this.currentSlide >= this.slides.length) {
+                            this.currentSlide = this.slides.length - 1;
+                        }
+
+                        this.updateSlidePosition();
+                        this.updateNavigation();
+                        this.updateSlideCounter();
+                        this.updateSlideNumbers();
+                        calculator.checkCalculateReady();
+                    }
+                });
+            }
+
+            duplicateSlide(slideId) {
+                const sourceSlide = this.slides.find(slide => slide.id === slideId);
+                if (!sourceSlide) return;
+
+                // Create new slide with copied data
+                const newSlideId = this.slideIdCounter++;
+                const newSlideData = {
+                    id: newSlideId,
+                    cards: sourceSlide.cards.map(card => ({ ...card }))
+                };
+
+                this.slides.push(newSlideData);
+
+                const slideElement = this.createSlideElement(newSlideData, this.slides.length);
+                document.getElementById('slides-wrapper').appendChild(slideElement);
+
+                // Populate the inputs with copied data
+                setTimeout(() => {
+                    newSlideData.cards.forEach((card, index) => {
+                        const nameInput = slideElement.querySelector(`[data-card="${index}"][data-type="name"]`);
+                        const copiesInput = slideElement.querySelector(`[data-card="${index}"][data-type="copies"]`);
+                        
+                        if (nameInput) nameInput.value = card.name;
+                        if (copiesInput) copiesInput.value = card.copies;
+                    });
+                }, 100);
+
+                // Animate and go to new slide
+                gsap.fromTo(slideElement, 
+                    { opacity: 0, x: 100 },
+                    { opacity: 1, x: 0, duration: 0.6, ease: 'power2.out' }
+                );
+
+                this.goToSlide(this.slides.length - 1);
+                this.updateNavigation();
+                this.updateSlideCounter();
+            }
+
+            updateSlideNumbers() {
+                const slideElements = document.querySelectorAll('.slide');
+                slideElements.forEach((slide, index) => {
+                    const titleElement = slide.querySelector('.slide-title');
+                    if (titleElement) {
+                        titleElement.textContent = `🎯 Combinazione ${index + 1}`;
+                    }
+                });
+            }
+
+            goToSlide(index) {
+                if (index < 0 || index >= this.slides.length) return;
+
+                this.currentSlide = index;
+                this.updateSlidePosition();
+                this.updateNavigation();
+                this.updateSlideCounter();
+            }
+
+            previousSlide() {
+                if (this.currentSlide > 0) {
+                    this.goToSlide(this.currentSlide - 1);
+                }
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.slides.length - 1) {
+                    this.goToSlide(this.currentSlide + 1);
+                }
+            }
+
+            updateSlidePosition() {
+                const wrapper = document.getElementById('slides-wrapper');
+                const translateX = -this.currentSlide * 100;
+                
+                gsap.to(wrapper, {
+                    x: `${translateX}%`,
+                    duration: 0.6,
+                    ease: 'power2.out'
+                });
+            }
+
+            updateNavigation() {
+                // Update navigation buttons
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+
+                prevBtn.disabled = this.currentSlide === 0;
+                nextBtn.disabled = this.currentSlide === this.slides.length - 1;
+
+                // Update dots indicator
+                this.updateDotsIndicator();
+            }
+
+            updateDotsIndicator() {
+                const dotsContainer = document.getElementById('dots-indicator');
+                dotsContainer.innerHTML = '';
+
+                this.slides.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.className = `dot ${index === this.currentSlide ? 'active' : ''}`;
+                    dot.addEventListener('click', () => {
+                        this.goToSlide(index);
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            }
+
+            updateSlideCounter() {
+                document.getElementById('current-slide').textContent = this.currentSlide + 1;
+                document.getElementById('total-slides').textContent = this.slides.length;
+            }
+
+            // Public methods for external integration
+            getAllSlides() {
+                return this.slides;
+            }
+
+            getCurrentSlide() {
+                return this.slides[this.currentSlide];
+            }
+
+            getCurrentSlideIndex() {
+                return this.currentSlide;
+            }
+
+            getSlideData(slideId) {
+                return this.slides.find(slide => slide.id === slideId);
+            }
+
+            // Method to get all filled cards across all slides
+            getAllFilledCards() {
+                return this.slides.map((slide, index) => ({
+                    slideIndex: index,
+                    slideId: slide.id,
+                    cards: slide.cards.filter(card => card.name.trim() !== '')
+                })).filter(slide => slide.cards.length > 0);
+            }
+
+            // Method to validate if any slide has valid cards
+            hasValidCards() {
+                return this.slides.some(slide => 
+                    slide.cards.some(card => card.name.trim() !== '')
+                );
+            }
+
+            // Reset all slides
+            reset() {
+                this.slides = [];
+                this.currentSlide = 0;
+                this.slideIdCounter = 0;
+                document.getElementById('slides-wrapper').innerHTML = '';
+                this.createFirstSlide();
+                this.updateNavigation();
+                this.updateSlideCounter();
+            }
+
+            // Export data for saving/sharing
+            exportData() {
+                return {
+                    slides: this.slides,
+                    currentSlide: this.currentSlide,
+                    timestamp: new Date().toISOString()
+                };
+            }
+
+            // Import data from saved state
+            importData(data) {
+                if (!data || !data.slides) return false;
+
+                try {
+                    this.slides = [];
+                    this.currentSlide = 0;
+                    this.slideIdCounter = 0;
+                    document.getElementById('slides-wrapper').innerHTML = '';
+
+                    data.slides.forEach((slideData, index) => {
+                        const newSlideData = {
+                            id: this.slideIdCounter++,
+                            cards: slideData.cards || Array(7).fill(null).map(() => ({ name: '', copies: 1 }))
+                        };
+
+                        this.slides.push(newSlideData);
+                        const slideElement = this.createSlideElement(newSlideData, index + 1, index === 0);
+                        document.getElementById('slides-wrapper').appendChild(slideElement);
+
+                        // Populate inputs
+                        setTimeout(() => {
+                            newSlideData.cards.forEach((card, cardIndex) => {
+                                const nameInput = slideElement.querySelector(`[data-card="${cardIndex}"][data-type="name"]`);
+                                const copiesInput = slideElement.querySelector(`[data-card="${cardIndex}"][data-type="copies"]`);
+                                
+                                if (nameInput) nameInput.value = card.name || '';
+                                if (copiesInput) copiesInput.value = card.copies || 1;
+                            });
+                        }, 100);
+                    });
+
+                    this.currentSlide = Math.min(data.currentSlide || 0, this.slides.length - 1);
+                    this.updateSlidePosition();
+                    this.updateNavigation();
+                    this.updateSlideCounter();
+
+                    return true;
+                } catch (error) {
+                    console.error('Error importing data:', error);
+                    return false;
+                }
+            }
+        }
+
         class MTGProbabilityCalculator {
             constructor() {
                 this.commanderCount = 0;
                 this.deckSize = 100;
                 this.handSize = 7;
-                this.cards = [];
                 this.currentTheme = 'red';
+                this.cardsSlider = null;
                 this.init();
             }
 
             init() {
                 this.setupEventListeners();
-                this.generateCards();
                 this.animateHeader();
                 this.updateColorVariables();
+                
+                // Initialize cards slider
+                this.cardsSlider = new CardsSlider();
             }
 
             animateHeader() {
@@ -709,6 +1494,7 @@
                     onComplete: () => {
                         document.getElementById('commander-section').classList.add('completed');
                         this.activateSection('cards-section');
+                        this.checkCalculateReady();
                     }
                 });
             }
@@ -728,82 +1514,10 @@
                 }
             }
 
-            generateCards() {
-                const hand = document.getElementById('hand');
-                hand.innerHTML = '';
-
-                for (let i = 0; i < 7; i++) {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="card-content">
-                            <input type="text" class="card-input" placeholder="Nome carta" data-card="${i}" data-type="name">
-                            <input type="number" class="card-number" placeholder="Copie" min="1" max="4" value="1" data-card="${i}" data-type="copies">
-                        </div>
-                    `;
-                    hand.appendChild(card);
-
-                    // Add event listeners
-                    const inputs = card.querySelectorAll('input');
-                    inputs.forEach(input => {
-                        input.addEventListener('input', () => this.updateCard(input));
-                        input.addEventListener('focus', () => this.highlightCard(card));
-                        input.addEventListener('blur', () => this.unhighlightCard(card));
-                    });
-                }
-
-                // Animate cards entrance
-                gsap.fromTo('.card', 
-                    { opacity: 0, y: 50, rotationY: 180 },
-                    { 
-                        opacity: 1, 
-                        y: 0, 
-                        rotationY: 0, 
-                        duration: 0.8, 
-                        stagger: 0.1,
-                        ease: 'back.out(1.7)'
-                    }
-                );
-            }
-
-            highlightCard(card) {
-                gsap.to(card, {
-                    boxShadow: '0 0 30px rgba(var(--primary-color-rgb), 0.5)',
-                    borderColor: 'var(--primary-color)',
-                    duration: 0.3
-                });
-            }
-
-            unhighlightCard(card) {
-                gsap.to(card, {
-                    boxShadow: 'none',
-                    borderColor: 'rgba(255, 255, 255, 0.2)',
-                    duration: 0.3
-                });
-            }
-
-            updateCard(input) {
-                const cardIndex = parseInt(input.dataset.card);
-                const type = input.dataset.type;
-                
-                if (!this.cards[cardIndex]) {
-                    this.cards[cardIndex] = { name: '', copies: 1 };
-                }
-
-                if (type === 'name') {
-                    this.cards[cardIndex].name = input.value;
-                } else if (type === 'copies') {
-                    this.cards[cardIndex].copies = parseInt(input.value) || 1;
-                }
-
-                this.checkCalculateReady();
-            }
-
             checkCalculateReady() {
-                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
                 const calculateBtn = document.getElementById('calculate-btn');
-
-                if (filledCards.length > 0 && this.commanderCount !== null) {
+                
+                if (this.cardsSlider && this.cardsSlider.hasValidCards() && this.commanderCount > 0) {
                     calculateBtn.disabled = false;
                     document.getElementById('cards-section').classList.add('completed');
                     this.activateSection('calculate-section');
@@ -816,27 +1530,38 @@
             }
 
             calculateProbability() {
-                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
+                if (!this.cardsSlider) return;
+
+                const allFilledCards = this.cardsSlider.getAllFilledCards();
                 
-                if (filledCards.length === 0) return;
+                if (allFilledCards.length === 0) return;
 
                 // Stop button animation
                 document.getElementById('calculate-btn').classList.remove('pulse');
 
-                // Calculate hypergeometric probability
-                const deckSizeAfterCommanders = this.deckSize - this.commanderCount;
-                const totalCopiesWanted = filledCards.reduce((sum, card) => sum + card.copies, 0);
-                
-                // Simplified calculation for demonstration
-                const basicProbability = this.calculateHypergeometric(
-                    deckSizeAfterCommanders,
-                    totalCopiesWanted,
-                    this.handSize
-                );
+                // Calculate probability for each combination and find the best
+                let bestProbability = 0;
+                let bestCombination = null;
 
-                const probability = Math.min(basicProbability * 100, 100);
+                allFilledCards.forEach(slideData => {
+                    const totalCopiesWanted = slideData.cards.reduce((sum, card) => sum + card.copies, 0);
+                    const deckSizeAfterCommanders = this.deckSize - this.commanderCount;
+                    
+                    const probability = this.calculateHypergeometric(
+                        deckSizeAfterCommanders,
+                        totalCopiesWanted,
+                        this.handSize
+                    );
 
-                this.displayResults(probability, filledCards, deckSizeAfterCommanders);
+                    if (probability > bestProbability) {
+                        bestProbability = probability;
+                        bestCombination = slideData;
+                    }
+                });
+
+                const probability = Math.min(bestProbability * 100, 100);
+
+                this.displayResults(probability, allFilledCards, this.deckSize - this.commanderCount);
             }
 
             calculateHypergeometric(deckSize, successCards, draws) {
@@ -853,7 +1578,7 @@
                 return Math.min(prob, 1.0);
             }
 
-            displayResults(probability, cards, deckSize) {
+            displayResults(probability, allCombinations, deckSize) {
                 document.getElementById('calculate-section').classList.add('completed');
                 this.activateSection('results-section');
 
@@ -866,10 +1591,15 @@
                         <p><strong>Carte nella mano iniziale:</strong> ${this.handSize}</p>
                         <p><strong>Commander:</strong> ${this.commanderCount}</p>
                         <p><strong>Tema colore:</strong> ${this.getThemeName()}</p>
-                        <p><strong>Carte desiderate:</strong></p>
-                        <ul>
-                            ${cards.map(card => `<li>${card.name} (${card.copies} copie)</li>`).join('')}
-                        </ul>
+                        <p><strong>Combinazioni analizzate:</strong> ${allCombinations.length}</p>
+                        ${allCombinations.map((combination, index) => `
+                            <div style="margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <h4>Combinazione ${index + 1}:</h4>
+                                <ul>
+                                    ${combination.cards.map(card => `<li>${card.name} (${card.copies} copie)</li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
                     </div>
                     <div class="qr-container" id="qr-code"></div>
                     <div class="download-section">
@@ -913,7 +1643,7 @@
             generateQRCode() {
                 const data = {
                     commanders: this.commanderCount,
-                    cards: this.cards.filter(card => card && card.name.trim() !== ''),
+                    slides: this.cardsSlider ? this.cardsSlider.exportData() : null,
                     theme: this.currentTheme,
                     timestamp: new Date().toISOString(),
                     url: window.location.href
@@ -953,18 +1683,28 @@
                 doc.text(`Carte commander: ${this.commanderCount}`, 20, 70);
                 doc.text(`Dimensione mazzo: ${100 - this.commanderCount}`, 20, 80);
 
-                // Cards
-                doc.text('Carte desiderate:', 20, 100);
-                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
-                filledCards.forEach((card, index) => {
-                    doc.text(`• ${card.name} (${card.copies} copie)`, 30, 110 + (index * 10));
-                });
+                // Combinations
+                if (this.cardsSlider) {
+                    const allCombinations = this.cardsSlider.getAllFilledCards();
+                    doc.text('Combinazioni:', 20, 100);
+                    
+                    let yPosition = 110;
+                    allCombinations.forEach((combination, index) => {
+                        doc.text(`Combinazione ${index + 1}:`, 30, yPosition);
+                        yPosition += 10;
+                        combination.cards.forEach((card) => {
+                            doc.text(`• ${card.name} (${card.copies} copie)`, 40, yPosition);
+                            yPosition += 10;
+                        });
+                        yPosition += 5;
+                    });
+                }
 
                 // Probability
-                const probability = document.querySelector('.probability-display').textContent;
+                const probability = document.querySelector('.probability-display')?.textContent || 'N/A';
                 doc.setFontSize(16);
                 doc.setTextColor(201, 56, 20);
-                doc.text(`Probabilità: ${probability}`, 20, 140 + (filledCards.length * 10));
+                doc.text(`Probabilità migliore: ${probability}`, 20, yPosition + 20);
 
                 // Footer
                 doc.setFontSize(10);
@@ -975,14 +1715,17 @@
             }
 
             shareResults() {
-                const filledCards = this.cards.filter(card => card && card.name.trim() !== '');
-                const probability = document.querySelector('.probability-display').textContent;
+                const allCombinations = this.cardsSlider ? this.cardsSlider.getAllFilledCards() : [];
+                const probability = document.querySelector('.probability-display')?.textContent || 'N/A';
                 
                 const shareText = `🎲 MTG Probability Calculator 🎲\n\n` +
                                   `🎨 Tema: ${this.getThemeName()}\n` +
                                   `👑 Commander: ${this.commanderCount}\n` +
-                                  `🃏 Carte desiderate:\n${filledCards.map(card => `• ${card.name} (${card.copies}x)`).join('\n')}\n\n` +
-                                  `📊 Probabilità: ${probability}\n\n` +
+                                  `🃏 Combinazioni (${allCombinations.length}):\n` +
+                                  allCombinations.map((combination, index) => 
+                                      `${index + 1}. ${combination.cards.map(card => `${card.name} (${card.copies}x)`).join(', ')}`
+                                  ).join('\n') + '\n\n' +
+                                  `📊 Probabilità migliore: ${probability}\n\n` +
                                   `#MTG #MagicTheGathering #Probability`;
 
                 if (navigator.share) {
@@ -1010,7 +1753,6 @@
 
             reset() {
                 this.commanderCount = 0;
-                this.cards = [];
 
                 // Reset all sections
                 document.querySelectorAll('.section').forEach(section => {
@@ -1029,8 +1771,10 @@
                 calculateBtn.disabled = true;
                 calculateBtn.classList.remove('pulse');
 
-                // Regenerate cards
-                this.generateCards();
+                // Reset cards slider
+                if (this.cardsSlider) {
+                    this.cardsSlider.reset();
+                }
 
                 // Smooth scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1050,7 +1794,7 @@
             // Handle window resize
             handleResize() {
                 // Regenerate QR code with appropriate size
-                if (document.getElementById('qr-code').children.length > 0) {
+                if (document.getElementById('qr-code') && document.getElementById('qr-code').children.length > 0) {
                     this.generateQRCode();
                 }
 
@@ -1066,6 +1810,10 @@
         // Initialize the calculator
         const calculator = new MTGProbabilityCalculator();
 
+        // Global access to cards slider
+        window.cardsSlider = calculator.cardsSlider;
+        window.calculator = calculator;
+
         // Handle window resize
         window.addEventListener('resize', () => {
             calculator.handleResize();
@@ -1076,12 +1824,90 @@
             document.body.style.cursor = 'pointer';
         }
 
-        // Keyboard navigation support
+        // Listen to card updates from slider
+        document.addEventListener('cardDataUpdated', (event) => {
+            console.log('Card data updated:', event.detail);
+            // Trigger validation when cards change
+            calculator.checkCalculateReady();
+        });
+
+        // Add some demo functionality for testing
+        function addDemoData() {
+            if (!calculator.cardsSlider) return;
+
+            const demoCards = [
+                { name: 'Lightning Bolt', copies: 4 },
+                { name: 'Counterspell', copies: 3 },
+                { name: 'Sol Ring', copies: 1 }
+            ];
+
+            const currentSlide = calculator.cardsSlider.getCurrentSlide();
+            if (currentSlide) {
+                demoCards.forEach((demoCard, index) => {
+                    if (index < currentSlide.cards.length) {
+                        currentSlide.cards[index] = demoCard;
+                        
+                        const slideElement = document.querySelector(`[data-slide-id="${currentSlide.id}"]`);
+                        const nameInput = slideElement.querySelector(`[data-card="${index}"][data-type="name"]`);
+                        const copiesInput = slideElement.querySelector(`[data-card="${index}"][data-type="copies"]`);
+                        
+                        if (nameInput) nameInput.value = demoCard.name;
+                        if (copiesInput) copiesInput.value = demoCard.copies;
+                    }
+                });
+                
+                // Trigger validation
+                calculator.checkCalculateReady();
+            }
+        }
+
+        // Add demo button (for testing purposes - remove in production)
+        const demoBtn = document.createElement('button');
+        demoBtn.textContent = 'Demo';
+        demoBtn.className = 'slide-btn';
+        demoBtn.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 0.8rem;
+        `;
+        demoBtn.addEventListener('click', addDemoData);
+        document.body.appendChild(demoBtn);
+
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.target.classList.contains('card-input')) {
-                const nextInput = e.target.parentElement.querySelector('.card-number');
-                if (nextInput) {
-                    nextInput.focus();
+            // Ctrl/Cmd + N for new slide
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                if (calculator.cardsSlider) {
+                    calculator.cardsSlider.addSlide();
+                }
+            }
+            
+            // Ctrl/Cmd + D for duplicate current slide
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                if (calculator.cardsSlider) {
+                    const currentSlide = calculator.cardsSlider.getCurrentSlide();
+                    if (currentSlide) {
+                        calculator.cardsSlider.duplicateSlide(currentSlide.id);
+                    }
+                }
+            }
+            
+            // Ctrl/Cmd + Enter for calculate
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                const calculateBtn = document.getElementById('calculate-btn');
+                if (!calculateBtn.disabled) {
+                    calculator.calculateProbability();
                 }
             }
         });
@@ -1089,10 +1915,75 @@
         // Add service worker for PWA functionality (optional)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Register service worker if available
                 console.log('PWA support available');
             });
         }
+
+        // Auto-save functionality (saves to localStorage)
+        function autoSave() {
+            if (calculator.cardsSlider) {
+                const saveData = {
+                    commanderCount: calculator.commanderCount,
+                    theme: calculator.currentTheme,
+                    slides: calculator.cardsSlider.exportData(),
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    localStorage.setItem('mtg-calculator-autosave', JSON.stringify(saveData));
+                } catch (e) {
+                    console.log('Auto-save not available');
+                }
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(autoSave, 30000);
+
+        // Load auto-saved data on page load
+        window.addEventListener('load', () => {
+            try {
+                const savedData = localStorage.getItem('mtg-calculator-autosave');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    
+                    // Ask user if they want to restore
+                    if (confirm('Trovati dati salvati automaticamente. Vuoi ripristinarli?')) {
+                        // Restore commander count
+                        if (data.commanderCount) {
+                            const commanderBtn = document.querySelector(`[data-commanders="${data.commanderCount}"]`);
+                            if (commanderBtn) {
+                                calculator.selectCommander(commanderBtn);
+                            }
+                        }
+                        
+                        // Restore theme
+                        if (data.theme) {
+                            calculator.changeTheme(data.theme);
+                        }
+                        
+                        // Restore slides
+                        if (data.slides && calculator.cardsSlider) {
+                            calculator.cardsSlider.importData(data.slides);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('Could not load auto-saved data');
+            }
+        });
+
+        console.log('🎲 MTG Probability Calculator initialized!');
+        console.log('🔧 Available global objects:', {
+            'calculator': 'Main calculator instance',
+            'cardsSlider': 'Cards slider instance'
+        });
+        console.log('⌨️ Keyboard shortcuts:', {
+            'Ctrl/Cmd + N': 'New slide',
+            'Ctrl/Cmd + D': 'Duplicate current slide',
+            'Ctrl/Cmd + Enter': 'Calculate probability',
+            'Arrow Left/Right': 'Navigate slides'
+        });
     </script>
 </body>
 </html>
